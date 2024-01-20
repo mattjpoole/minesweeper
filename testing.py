@@ -12,35 +12,30 @@ window_width = EASY_CELL_SIZE * EASY_GRID_SIZE
 window_height = window_width + UI_HEIGHT
 screen = pygame.display.set_mode((window_width, window_height))
 background = pygame.Surface((window_width, window_height))
-background.fill(pygame.Color(UI_BG_COLOUR))
+background.fill(pygame.Color(WINDOW_BG_COLOUR))
 clock = pygame.time.Clock()
 
 manager = pygame_gui.UIManager((window_width, window_height))
 
-#main game classes
-ui = UIControls(manager)
+# main game classes
+ui = UIControls(manager=manager)
 ui.initialise()
 field = SweeperField()
 field.initialise()
 
 running = True
 while running:
-    time_delta = clock.tick(CLOCK_SPEED)/ 1000.0
-    for event in pygame.event.get(): 
+    time_delta = clock.tick(CLOCK_SPEED)/1000.0
+    for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            field.click_cell_at_coords(pygame.mouse.get_pos())
-        
+
         manager.process_events(event)
 
     ui.render(time_delta)
 
     screen.blit(background, (0, 0))
-    field.render()
+    field.initialise()
     ui.draw_ui(screen)
 
-    # flip() the display to put your work on screen
-    pygame.display.flip()
-
-pygame.quit()
+    pygame.display.update()
