@@ -16,9 +16,15 @@ class SweeperField():
         column = left = cell_num = row = 0
         while cell_num<total:
             if (cell_num % 2 == 0):
-                colour = CELL_COLOUR
+                if (row % 2 == 0):
+                    colour = CELL_COLOUR
+                else:   
+                    colour = ALT_CELL_COLOUR
             else:
-                colour = ALT_CELL_COLOUR
+                if (row % 2 == 0):
+                    colour = ALT_CELL_COLOUR
+                else: 
+                    colour = CELL_COLOUR
             rect = pygame.draw.rect(screen, colour, [left, top, EASY_CELL_SIZE, EASY_CELL_SIZE])
             cell = SweeperCell(rect)
             grid_list.append(cell)
