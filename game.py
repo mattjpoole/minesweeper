@@ -8,6 +8,7 @@ class Game():
         self.window_width = None
         self.window_height = None
         self.screen = None
+        self.background = None
         pygame.init()
         pygame.display.set_caption(WINDOW_CAPTION)
 
@@ -21,9 +22,14 @@ class Game():
                 self.window_width = HARD_CELL_SIZE * HARD_GRID_SIZE
             self.window_height = self.window_width + UI_HEIGHT
             self.screen = pygame.display.set_mode((self.window_width, self.window_height))
-        self.level = level
+            self.background = pygame.Surface(pygame.display.get_window_size())
+            self.background.fill(pygame.Color(UI_BG_COLOUR))
+            self.level = level
         return self.screen
     
     def getLevel(self) -> str:
         return self.level
+    
+    def render(self) -> None:
+        self.screen.blit(self.background, (0, 0))
 
