@@ -8,13 +8,26 @@ class SweeperField():
     def __init__(self) -> None:
         self.grid_list = []
 
-    def initialise(self) -> None:
-        """Create a feild of sweeper cells ready to start the gane"""
-        total = EASY_GRID_SIZE * EASY_GRID_SIZE
+    def initialise(self, level) -> None:
+        """Create a feild of sweeper cells ready to start the game"""
+        if level == LEVEL_EASY:
+            grid_size = EASY_GRID_SIZE
+            cell_size = EASY_CELL_SIZE
+            num_mines = NUM_MINES_EASY
+        elif level == LEVEL_MEDIUM:
+            grid_size = MEDIUM_GRID_SIZE
+            cell_size = MEDIUM_CELL_SIZE
+            num_mines = NUM_MINES_MEDIUM
+        else:
+            grid_size = HARD_GRID_SIZE
+            cell_size = HARD_CELL_SIZE
+            num_mines = NUM_MINES_HARD
+        
+        total = grid_size * grid_size
         screen = pygame.display.get_surface()
         top = UI_HEIGHT
         column = left = cell_num = row = 0
-        mine_locations = self.generatate_mine_locations(total)
+        mine_locations = self.generatate_mine_locations(total, num_mines)
         while cell_num<total:
             if (cell_num % 2 == 0):
                 if (row % 2 == 0):
@@ -26,7 +39,7 @@ class SweeperField():
                     colour = ALT_CELL_COLOUR
                 else: 
                     colour = CELL_COLOUR
-            rect = pygame.draw.rect(screen, colour, [left, top, EASY_CELL_SIZE, EASY_CELL_SIZE])
+            rect = pygame.draw.rect(screen, colour, [left, top, cell_size, cell_size])
             has_mine = False
             for location in mine_locations:
                 if cell_num == location:
@@ -35,11 +48,11 @@ class SweeperField():
             self.grid_list.append(cell)
             # prepare for next loop
             cell_num += 1
-            column = cell_num % EASY_GRID_SIZE
+            column = cell_num % grid_size
             if column == 0:
                 row += 1
-            left = column * EASY_CELL_SIZE
-            top = row * EASY_CELL_SIZE + UI_HEIGHT
+            left = column * cell_size
+            top = row * cell_size + UI_HEIGHT
 
     def render(self) -> None:
         screen = pygame.display.get_surface()
@@ -49,10 +62,10 @@ class SweeperField():
             if (cell_rect.collidepoint(pygame.mouse.get_pos())):
                 pygame.draw.rect(screen, CELL_BORDER_HOVER, cell_rect, 2)
 
-    def generatate_mine_locations(self, total) -> list:
+    def generatate_mine_locations(self, total, num_mines) -> list:
         # no logic yet for removing dupes
         mine_locations = []
-        while len(mine_locations)< NUM_MINES_EASY:
+        while len(mine_locations)< num_mines:
             location = random.randint(0, total-1)
             mine_locations.append(location)
         return mine_locations
