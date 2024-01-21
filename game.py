@@ -9,6 +9,7 @@ class Game():
         self.window_height = None
         self.screen = None
         self.background = None
+        self.icons = {}
         pygame.init()
         pygame.display.set_caption(WINDOW_CAPTION)
 
@@ -32,4 +33,10 @@ class Game():
     
     def render(self) -> None:
         self.screen.blit(self.background, (0, 0))
+
+    def load_icons(self) -> list:
+        for icon in ICONS:
+            path = ICONS_PATH+icon+ICON_EXT
+            self.icons[icon] = pygame.image.load(path).convert_alpha()
+        return self.icons
 
