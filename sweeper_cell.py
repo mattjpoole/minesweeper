@@ -1,5 +1,5 @@
 import pygame
-from config import ICON_STATE_CLOSED
+from config import ICON_STATE_CLOSED, ICON_FLAG
 
 class SweeperCell():
 
@@ -26,7 +26,10 @@ class SweeperCell():
     def is_closed(self) -> bool:
         return self.state == ICON_STATE_CLOSED
     
-    def set_state(self, state, icon) -> None:
+    def has_flag(self) -> bool:
+        return self.state == ICON_FLAG
+    
+    def set_state(self, state, icon=None) -> None:
         self.state = state
         self.icon = icon
 

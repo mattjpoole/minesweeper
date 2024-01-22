@@ -30,8 +30,7 @@ while running:
             if mouse_click[0]:
                 field.click_cell_at_coords(pygame.mouse.get_pos())
             elif mouse_click[2]:
-                # set flag
-                print ("right click")
+                field.right_click_cell_at_coords(pygame.mouse.get_pos())
         elif event.type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
             screen = game.setLevel(event.text)
             manager.set_window_resolution(pygame.display.get_window_size())

@@ -31,8 +31,8 @@ class SweeperField():
         column = left = cell_num = row = 0
         mine_locations = self.generatate_mine_locations(total, num_mines)
         while cell_num<total:
-            if (cell_num % 2 == 0):
-                if (row % 2 == 0):
+            if cell_num % 2 == 0:
+                if row % 2 == 0:
                     colour = CELL_COLOUR
                 else:   
                     colour = ALT_CELL_COLOUR
@@ -90,7 +90,17 @@ class SweeperField():
                     # iterate over icons based upon neighbourng cells
                     pass
     
+    def right_click_cell_at_coords(self, coords) -> None:
+        for cell in self.grid_list:
+            cell_rect = cell.get_rect()
+            if cell_rect.collidepoint(coords):
+                if cell.has_flag():
+                    cell.set_state(ICON_STATE_CLOSED)
+                elif cell.is_closed():
+                    cell.set_state(ICON_FLAG, self.icons[ICON_FLAG])
+                    
+    
     def reveal_all_mines(self):
         for cell in self.grid_list:
-                if cell.is_mine_square() and cell.is_closed:
-                    cell.set_state(ICON_MINE, self.icons[ICON_MINE])
+            if cell.is_mine_square() and cell.is_closed:
+                cell.set_state(ICON_MINE, self.icons[ICON_MINE])
