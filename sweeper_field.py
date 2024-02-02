@@ -14,6 +14,7 @@ class SweeperField():
     def initialise(self, level) -> None:
         """Create a feild of sweeper cells ready to start the game"""
         self.grid_list = []
+        self.level = level
         if level == LEVEL_EASY:
             self.grid_size = EASY_GRID_SIZE
             cell_size = EASY_CELL_SIZE
@@ -86,12 +87,18 @@ class SweeperField():
             cell.render()
 
     def generatate_mine_locations(self, total, num_mines) -> dict:
-        if DEBUG_ON :
-            return DEBUG_MINE_LOCATIONS # needs to be a dict     
         mine_locations = {}
-        while len(mine_locations) < num_mines:
-            location = random.randint(0, total-1)
-            mine_locations[str(location)] = location
+        if DEBUG_ON :
+            if self.level == LEVEL_EASY:
+                mine_locations = DEBUG_MINE_LOCATIONS_EASY   
+            elif self.level == LEVEL_MEDIUM:
+                mine_locations = DEBUG_MINE_LOCATIONS_MEDIUM
+            elif self.level == LEVEL_HARD:
+                mine_locations = DEBUG_MINE_LOCATIONS_HARD
+        else:
+            while len(mine_locations) < num_mines:
+                location = random.randint(0, total-1)
+                mine_locations[str(location)] = location
         return mine_locations
     
     def click_cell_at_coords(self, coords) -> bool:
@@ -125,7 +132,7 @@ class SweeperField():
         return toggled_on
 
     def get_neighbours(self, kernel) -> list:
-        """Method to select neighbouring cells for give cell"""
+        """Method to select neighbouring cells for given cell"""
         out_of_bounds_rect = pygame.Rect(0,0,0,0)
         top_left = top_middle = top_right = middle_left = middle_right = bottom_left = bottom_middle = bottom_right = SweeperCell(out_of_bounds_rect, None, False, ICON_STATE_OUTOFBOUNDS)
         cell_index = kernel.get_grid_index()
