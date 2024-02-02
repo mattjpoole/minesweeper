@@ -35,6 +35,7 @@ class UIControls():
             self.flags_to_place = NUM_MINES_MEDIUM
         elif level == LEVEL_HARD:
             self.flags_to_place = NUM_MINES_HARD
+        self.game_time = 0
 
     def set_time_delta(self, time_delta) -> None:
         self.ui_manager.update(time_delta)

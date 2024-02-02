@@ -45,7 +45,7 @@ class SweeperField():
                     colour = CELL_COLOUR
             rect = pygame.draw.rect(screen, colour, [left, top, cell_size, cell_size])
             has_mine = False
-            for location in mine_locations:
+            for location in mine_locations.values():
                 if cell_num == location:
                     has_mine = True
             cell = SweeperCell(rect, colour, has_mine)
@@ -85,14 +85,14 @@ class SweeperField():
                 pygame.draw.rect(screen, CELL_BORDER_HOVER, cell_rect, 2)
             cell.render()
 
-    def generatate_mine_locations(self, total, num_mines) -> list:
+    def generatate_mine_locations(self, total, num_mines) -> dict:
         if DEBUG_ON :
             return DEBUG_MINE_LOCATIONS      
        # no logic yet for removing dupes
-        mine_locations = []
+        mine_locations = {}
         while len(mine_locations) < num_mines:
             location = random.randint(0, total-1)
-            mine_locations.append(location)
+            mine_locations[str(location)] = location
         return mine_locations
     
     def click_cell_at_coords(self, coords) -> bool:

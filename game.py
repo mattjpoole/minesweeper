@@ -28,6 +28,7 @@ class Game():
             self.background = pygame.Surface(pygame.display.get_window_size())
             self.background.fill(pygame.Color(UI_BG_COLOUR))
             self.level = level
+        self.started = False
         return self.screen
     
     def getLevel(self) -> str:
