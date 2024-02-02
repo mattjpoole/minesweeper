@@ -95,8 +95,9 @@ class SweeperField():
             mine_locations.append(location)
         return mine_locations
     
-    def click_cell_at_coords(self, coords) -> None:
+    def click_cell_at_coords(self, coords) -> bool:
         index = 0
+        cell_clicked = False
         for cell in self.grid_list:
             cell_rect = cell.get_rect()
             if cell_rect.collidepoint(coords):
@@ -107,10 +108,13 @@ class SweeperField():
                     self.reveal_all_mines()
                 else:
                     self.reveal_cells(cell, self.get_neighbours(cell))
+                    cell_clicked = True
                     break
             index += 1
+        return cell_clicked
     
-    def right_click_cell_at_coords(self, coords) -> None:
+    def right_click_cell_at_coords(self, coords) -> bool:
+        toggled_on = False
         for cell in self.grid_list:
             cell_rect = cell.get_rect()
             if cell_rect.collidepoint(coords):
@@ -118,6 +122,8 @@ class SweeperField():
                     cell.set_state(ICON_STATE_CLOSED)
                 elif cell.is_closed():
                     cell.set_state(ICON_FLAG, self.icons[ICON_FLAG])
+                    toggled_on = True
+        return toggled_on
 
     def get_neighbours(self, kernel) -> list:
         """Method to select neighbouring cells for give cell"""

@@ -30,10 +30,15 @@ while running:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_click = pygame.mouse.get_pressed()
+            cell_clicked = toggled_on = False
             if mouse_click[0]:
-                field.click_cell_at_coords(pygame.mouse.get_pos())
+                cell_clicked = field.click_cell_at_coords(pygame.mouse.get_pos())
             elif mouse_click[2]:
-                field.right_click_cell_at_coords(pygame.mouse.get_pos())
+                toggled_on = field.right_click_cell_at_coords(pygame.mouse.get_pos())
+                ui.use_flag(toggled_on)
+            
+            if cell_clicked or toggled_on:
+                game.start_game()
         elif event.type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
             screen = game.setLevel(event.text)
             ui.set_level(game.getLevel())
@@ -43,7 +48,9 @@ while running:
                 field.reveal_all_mines()
         manager.process_events(event)
 
-    ui.set_time(time_delta)
+    ui.set_time_delta(time_delta)
+    if (game.started):
+        ui.set_game_time(game.get_time())
     game.render()
     field.render()
     ui.render()

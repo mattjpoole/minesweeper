@@ -10,6 +10,8 @@ class Game():
         self.screen = None
         self.background = None
         self.icons = {}
+        self.timer = 0
+        self.started = False
         pygame.init()
         pygame.display.set_caption(WINDOW_CAPTION)
 
@@ -30,6 +32,14 @@ class Game():
     
     def getLevel(self) -> str:
         return self.level
+
+    def start_game(self) -> None:
+        if not self.started:
+            self.timer = pygame.time.get_ticks()
+            self.started = True
+    
+    def get_time(self) -> int:
+        return pygame.time.get_ticks() - self.timer
     
     def render(self) -> None:
         self.screen.blit(self.background, (0, 0))
