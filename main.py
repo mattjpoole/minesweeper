@@ -12,8 +12,9 @@ screen = game.setLevel(LEVEL_EASY)
 manager = pygame_gui.UIManager(pygame.display.get_window_size())
 
 # main game classes
-ui = UIControls(manager)
+ui = UIControls(manager, game.background)
 ui.initialise(game.getLevel())
+ui.set_icons(game.load_icons())
 field = SweeperField()
 field.initialise(game.getLevel())
 field.set_icons(game.load_icons())
@@ -35,14 +36,17 @@ while running:
                 field.right_click_cell_at_coords(pygame.mouse.get_pos())
         elif event.type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
             screen = game.setLevel(event.text)
+            ui.set_level(game.getLevel())
             manager.set_window_resolution(pygame.display.get_window_size())
             field.initialise(game.getLevel())
+            if DEBUG_ON:
+                field.reveal_all_mines()
         manager.process_events(event)
 
-    ui.render(time_delta)
+    ui.set_time(time_delta)
     game.render()
     field.render()
-    ui.draw_ui(screen)
+    ui.render()
 
     pygame.display.flip()
 

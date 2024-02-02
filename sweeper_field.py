@@ -13,6 +13,7 @@ class SweeperField():
 
     def initialise(self, level) -> None:
         """Create a feild of sweeper cells ready to start the game"""
+        self.grid_list = []
         if level == LEVEL_EASY:
             self.grid_size = EASY_GRID_SIZE
             cell_size = EASY_CELL_SIZE

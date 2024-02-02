@@ -12,16 +12,14 @@ screen = game.setLevel(LEVEL_EASY)
 manager = pygame_gui.UIManager(pygame.display.get_window_size())
 
 # main game classes
-ui = UIControls(manager)
+ui = UIControls(manager, game.background)
 ui.initialise()
+
 field = SweeperField()
 field.initialise(game.getLevel())
 icons = game.load_icons()
 field.set_icons(icons)
-
-new_surface = pygame.Surface((100,100))
-new_surface.blit(icons[ICON_ONE], (0,0))
-screen.blit(new_surface, (0,0))
+ui.set_icons(icons)
 
 running = True
 clock = pygame.time.Clock()
@@ -33,11 +31,10 @@ while running:
 
     
 
-    ui.render(time_delta)
+    ui.set_time(time_delta)
+    game.render()
     field.render()
-    ui.draw_ui(screen)
-
-    pygame.display.get_surface().blit(icons[ICON_TWO], (0,0))
+    ui.render(screen)
 
     pygame.display.flip()
 
