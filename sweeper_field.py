@@ -87,8 +87,7 @@ class SweeperField():
 
     def generatate_mine_locations(self, total, num_mines) -> dict:
         if DEBUG_ON :
-            return DEBUG_MINE_LOCATIONS      
-       # no logic yet for removing dupes
+            return DEBUG_MINE_LOCATIONS # needs to be a dict     
         mine_locations = {}
         while len(mine_locations) < num_mines:
             location = random.randint(0, total-1)
@@ -181,5 +180,7 @@ class SweeperField():
 
     def reveal_all_mines(self):
         for cell in self.grid_list:
-            if cell.is_mine_square() and cell.is_closed:
+            if cell.is_mine_square() and cell.is_closed():
                 cell.set_state(ICON_MINE, self.icons[ICON_MINE])
+            elif cell.has_flag() and not cell.is_mine_square():
+                cell.set_state(ICON_BADFLAG, self.icons[ICON_BADFLAG])
