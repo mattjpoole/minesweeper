@@ -1,5 +1,5 @@
 import pygame
-from config import ICON_STATE_CLOSED, ICON_FLAG, ICON_STATE_PENDING, ICON_STATE_EMPTY
+from config import ICON_STATE_CLOSED, ICON_FLAG, ICON_STATE_EMPTY, ICON_STATE_OUTOFBOUNDS
 
 class SweeperCell():
 
@@ -12,6 +12,8 @@ class SweeperCell():
         self.size = None
         self.column = 0
         self.row = 0
+        self.index = None
+        self.num_mines = 0
 
     def get_rect(self) -> pygame.Rect:
         return self.rect
@@ -30,9 +32,9 @@ class SweeperCell():
 
     def is_empty(self) -> bool:
         return self.state == ICON_STATE_EMPTY
-    
-    def state_is_pending(self) -> bool:
-        return self.state == ICON_STATE_PENDING
+
+    def is_in_bounds(self) -> bool:
+        return self.state != ICON_STATE_OUTOFBOUNDS
     
     def has_flag(self) -> bool:
         return self.state == ICON_FLAG
@@ -43,6 +45,18 @@ class SweeperCell():
 
     def set_size(self, size:tuple) -> None:
         self.size = size
+
+    def set_num_mines(self, num) -> None:
+        self.num_mines = num
+    
+    def get_num_mines(self) -> int:
+        return self.num_mines
+    
+    def set_grid_index(self, index) -> None:
+        self.index = index
+    
+    def get_grid_index(self) -> int:
+        return self.index
 
     def set_field_coords(self, column, row):
         self.column = column

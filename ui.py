@@ -10,10 +10,10 @@ class UIControls():
         self.bg_rect = None
         self.bg_surface = None
 
-    def initialise(self) -> None:                             
+    def initialise(self, starting_level=LEVEL_EASY) -> None:                             
         self.level_drop_down = pygame_gui.elements.UIDropDownMenu(
             options_list=[LEVEL_EASY, LEVEL_MEDIUM, LEVEL_HARD],
-            starting_option=LEVEL_EASY, relative_rect=pygame.Rect((7, 7), (100, 40)),
+            starting_option=starting_level, relative_rect=pygame.Rect((7, 7), (100, 40)),
             manager=self.ui_manager)
 
 

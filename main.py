@@ -1,7 +1,7 @@
 """Minesweeper clone for fun"""
 import pygame
 import pygame_gui
-from config import LEVEL_EASY, CLOCK_SPEED
+from config import *
 from game import Game
 from ui import UIControls
 from sweeper_field import SweeperField
@@ -13,10 +13,12 @@ manager = pygame_gui.UIManager(pygame.display.get_window_size())
 
 # main game classes
 ui = UIControls(manager)
-ui.initialise()
+ui.initialise(game.getLevel())
 field = SweeperField()
 field.initialise(game.getLevel())
 field.set_icons(game.load_icons())
+if DEBUG_ON:
+    field.reveal_all_mines()
 
 running = True
 clock = pygame.time.Clock()
