@@ -9,12 +9,13 @@ class SweeperField():
         self.grid_list = []
         self.icons = []
         self.grid_size = 0
-        self.rn = 0
+        self.num_mines = 0
 
     def initialise(self, level) -> None:
         """Create a feild of sweeper cells ready to start the game"""
         self.grid_list = []
         self.level = level
+        self.game_over = False
         if level == LEVEL_EASY:
             self.grid_size = EASY_GRID_SIZE
             cell_size = EASY_CELL_SIZE
@@ -27,7 +28,7 @@ class SweeperField():
             self.grid_size = HARD_GRID_SIZE
             cell_size = HARD_CELL_SIZE
             num_mines = NUM_MINES_HARD
-
+        self.num_mines = num_mines
         total = self.grid_size * self.grid_size
         screen = pygame.display.get_surface()
         top = UI_HEIGHT
@@ -112,6 +113,7 @@ class SweeperField():
                     cell.set_colour(CELL_COLOUR_MINE)
                     cell.set_state(ICON_MINE, self.icons[ICON_MINE])
                     self.reveal_all_mines()
+                    self.game_over = True
                 else:
                     self.reveal_cells(cell, self.get_neighbours(cell))
                     cell_clicked = True
@@ -119,17 +121,19 @@ class SweeperField():
             index += 1
         return cell_clicked
     
-    def right_click_cell_at_coords(self, coords) -> bool:
-        toggled_on = False
+    def right_click_cell_at_coords(self, coords, flags_left) -> int:
+        change = 0
         for cell in self.grid_list:
             cell_rect = cell.get_rect()
             if cell_rect.collidepoint(coords):
                 if cell.has_flag():
                     cell.set_state(ICON_STATE_CLOSED)
+                    change = 1
                 elif cell.is_closed():
-                    cell.set_state(ICON_FLAG, self.icons[ICON_FLAG])
-                    toggled_on = True
-        return toggled_on
+                    if flags_left > 0:
+                        cell.set_state(ICON_FLAG, self.icons[ICON_FLAG])
+                        change = -1
+        return change
 
     def get_neighbours(self, kernel) -> list:
         """Method to select neighbouring cells for given cell"""
@@ -191,3 +195,13 @@ class SweeperField():
                 cell.set_state(ICON_MINE, self.icons[ICON_MINE])
             elif cell.has_flag() and not cell.is_mine_square():
                 cell.set_state(ICON_BADFLAG, self.icons[ICON_BADFLAG])
+
+    def is_win_condition(self) -> bool:
+        flagged_mines = 0
+        for cell in self.grid_list:
+            if cell.is_mine_square() and cell.has_flag():
+                flagged_mines += 1
+        return flagged_mines == self.num_mines
+    
+    def is_game_over(self) -> bool:
+        return self.game_over

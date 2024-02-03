@@ -11,9 +11,10 @@ class UIControls():
         self.bg_rect = bg_rect
         self.icons = None
         self.game_time = 0
+        self.flags_to_place = 0
 
-    def initialise(self, starting_level=LEVEL_EASY) -> None:                             
-        self.set_level(starting_level)
+    def initialise(self, starting_level, flags) -> None:                             
+        self.set_level(starting_level, flags)
         
         self.level_drop_down = pygame_gui.elements.UIDropDownMenu(
             options_list=[LEVEL_EASY, LEVEL_MEDIUM, LEVEL_HARD],
@@ -27,14 +28,9 @@ class UIControls():
     def set_icons(self, icons) -> None:
         self.icons = icons
     
-    def set_level(self, level) -> None:
+    def set_level(self, level, flags) -> None:
         self.level = level
-        if level == LEVEL_EASY:
-            self.flags_to_place = NUM_MINES_EASY
-        elif level == LEVEL_MEDIUM:
-            self.flags_to_place = NUM_MINES_MEDIUM
-        elif level == LEVEL_HARD:
-            self.flags_to_place = NUM_MINES_HARD
+        self.flags_to_place = flags
         self.game_time = 0
 
     def set_time_delta(self, time_delta) -> None:
@@ -43,11 +39,8 @@ class UIControls():
     def set_game_time(self, game_time) -> None:
         self.game_time = game_time
 
-    def use_flag(self, toggled_on) -> None:
-        if toggled_on:
-            self.flags_to_place -= 1
-        else:
-            self.flags_to_place += 1
+    def set_flags(self, flags) -> None:
+        self.flags_to_place = flags
     
     def render(self) -> None:
         screen = pygame.display.get_surface()

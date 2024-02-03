@@ -16,13 +16,16 @@ class Game():
         pygame.display.set_caption(WINDOW_CAPTION)
 
     def setLevel(self, level) -> pygame.Surface:
+        if level == LEVEL_EASY:
+            self.window_width = EASY_CELL_SIZE * EASY_GRID_SIZE
+            self.flags_to_place = NUM_MINES_EASY  
+        elif level == LEVEL_MEDIUM:
+            self.window_width = MEDIUM_CELL_SIZE * MEDIUM_GRID_SIZE
+            self.flags_to_place = NUM_MINES_MEDIUM
+        elif level == LEVEL_HARD:
+            self.window_width = HARD_CELL_SIZE * HARD_GRID_SIZE
+            self.flags_to_place = NUM_MINES_HARD
         if level != self.level:
-            if level == LEVEL_EASY:
-                self.window_width = EASY_CELL_SIZE * EASY_GRID_SIZE   
-            elif level == LEVEL_MEDIUM:
-                self.window_width = MEDIUM_CELL_SIZE * MEDIUM_GRID_SIZE
-            else:
-                self.window_width = HARD_CELL_SIZE * HARD_GRID_SIZE
             self.window_height = self.window_width + UI_HEIGHT
             self.screen = pygame.display.set_mode((self.window_width, self.window_height))
             self.background = pygame.Surface(pygame.display.get_window_size())
@@ -39,8 +42,17 @@ class Game():
             self.timer = pygame.time.get_ticks()
             self.started = True
     
+    def stop_game(self) -> None:
+        self.started = False
+    
     def get_time(self) -> int:
         return pygame.time.get_ticks() - self.timer
+    
+    def use_flag(self, change) -> None:
+        self.flags_to_place += change
+
+    def get_flags(self) -> int:
+        return self.flags_to_place
     
     def render(self) -> None:
         self.screen.blit(self.background, (0, 0))

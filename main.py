@@ -13,7 +13,7 @@ manager = pygame_gui.UIManager(pygame.display.get_window_size())
 
 # main game classes
 ui = UIControls(manager, game.background)
-ui.initialise(game.getLevel())
+ui.initialise(game.getLevel(), game.get_flags())
 ui.set_icons(game.load_icons())
 field = SweeperField()
 field.initialise(game.getLevel())
@@ -30,18 +30,26 @@ while running:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_click = pygame.mouse.get_pressed()
-            cell_clicked = toggled_on = False
+            cell_clicked = False
+            ammend_flags = 0
             if mouse_click[0]:
                 cell_clicked = field.click_cell_at_coords(pygame.mouse.get_pos())
+                if field.is_game_over():
+                    game.stop_game()
+                    print("LOSE!!")
             elif mouse_click[2]:
-                toggled_on = field.right_click_cell_at_coords(pygame.mouse.get_pos())
-                ui.use_flag(toggled_on)
-            
-            if cell_clicked or toggled_on:
+                flags_left = game.get_flags()
+                ammend_flags = field.right_click_cell_at_coords(pygame.mouse.get_pos(), flags_left)
+                game.use_flag(ammend_flags)
+                ui.set_flags(game.get_flags())
+                if field.is_win_condition():
+                    game.stop_game()
+                    print("WIN!!!")
+            if cell_clicked or ammend_flags == -1:
                 game.start_game()
         elif event.type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
             screen = game.setLevel(event.text)
-            ui.set_level(game.getLevel())
+            ui.set_level(game.getLevel(), game.get_flags())
             manager.set_window_resolution(pygame.display.get_window_size())
             field.initialise(game.getLevel())
             if DEBUG_ON:
