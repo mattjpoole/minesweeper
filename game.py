@@ -12,7 +12,7 @@ class Game():
         self.background = None
         self.icons = {}
         self.timer = 0
-        self.started = False
+        self.state = GAME_STATE_WAITING
         self.data = {}
         pygame.init()
         pygame.display.set_caption(WINDOW_CAPTION)
@@ -33,7 +33,7 @@ class Game():
             self.background = pygame.Surface(pygame.display.get_window_size())
             self.background.fill(pygame.Color(UI_BG_COLOUR))
             self.level = level
-        self.started = False
+        self.state = GAME_STATE_WAITING
         return self.screen
     
     def load_game_data(self) -> None:
@@ -50,19 +50,25 @@ class Game():
         return self.level
 
     def start_game(self) -> None:
-        if not self.started:
+        if not self.state == GAME_STATE_STARTED:
             self.timer = pygame.time.get_ticks()
-            self.started = True
+            self.state = GAME_STATE_STARTED
     
     def game_over(self) -> None:
-        self.started = False
+        self.state = GAME_STATE_GAMEOVER
     
     def win_game(self) -> None:
-        self.started = False
+        self.state = GAME_STATE_WIN
         self.data[self.level] = self.get_time()
         with open(GAME_DATA_LOCATION, 'w') as store_file: 
                 json.dump(self.data, store_file)
     
+    def has_started(self) -> bool:
+        return self.state == GAME_STATE_STARTED
+    
+    def get_state(self) -> str:
+        return self.state
+
     def get_time(self) -> int:
         return pygame.time.get_ticks() - self.timer
     
@@ -71,7 +77,13 @@ class Game():
 
     def get_flags(self) -> int:
         return self.flags_to_place
+
+    def get_icons(self) -> list:
+        return self.icons
     
+    def get_data(self) -> dict:
+        return self.data
+     
     def render(self) -> None:
         self.screen.blit(self.background, (0, 0))
 

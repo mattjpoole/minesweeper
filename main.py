@@ -5,6 +5,7 @@ from config import *
 from game import Game
 from ui import UIControls
 from sweeper_field import SweeperField
+from end_screen import EndScreen
 
 # game setup
 game = Game()
@@ -18,7 +19,10 @@ ui.initialise(game.getLevel(), game.get_flags())
 ui.set_icons(game.load_icons())
 field = SweeperField()
 field.initialise(game.getLevel())
-field.set_icons(game.load_icons())
+field.set_icons(game.get_icons())
+end_screen = EndScreen()
+end_screen.initialise()
+end_screen.set_icons(game.get_icons())
 if DEBUG_ON:
     field.reveal_all_mines()
 
@@ -26,6 +30,7 @@ running = True
 clock = pygame.time.Clock()
 while running:
     time_delta = clock.tick(CLOCK_SPEED)/ 1000.0
+    game_state = game.get_state()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -33,19 +38,27 @@ while running:
             mouse_click = pygame.mouse.get_pressed()
             cell_clicked = False
             ammend_flags = 0
-            if mouse_click[0]:
-                cell_clicked = field.click_cell_at_coords(pygame.mouse.get_pos())
-                if field.is_game_over():
-                    game.game_over()
-            elif mouse_click[2]:
-                flags_left = game.get_flags()
-                ammend_flags = field.right_click_cell_at_coords(pygame.mouse.get_pos(), flags_left)
-                game.use_flag(ammend_flags)
-                ui.set_flags(game.get_flags())
-                if field.is_win_condition():
-                    game.win_game()
-            if cell_clicked or ammend_flags == -1:
-                game.start_game()
+            left_click = mouse_click[0]
+            right_click = mouse_click[2]
+            if game.has_started() or game_state == GAME_STATE_WAITING:
+                if left_click:
+                    cell_clicked = field.click_cell_at_coords(pygame.mouse.get_pos())
+                    if field.is_game_over():
+                        game.game_over()
+                elif right_click:
+                    flags_left = game.get_flags()
+                    ammend_flags = field.right_click_cell_at_coords(pygame.mouse.get_pos(), flags_left)
+                    game.use_flag(ammend_flags)
+                    ui.set_flags(game.get_flags())
+                if cell_clicked or ammend_flags == -1:
+                   game.start_game()
+                   if field.is_win_condition() and ammend_flags == -1:
+                       game.win_game()
+            elif game_state == GAME_STATE_GAMEOVER or game_state == GAME_STATE_WIN:
+                if end_screen.try_again_clicked(pygame.mouse.get_pos()):
+                    game.setLevel(game.getLevel())
+                    field.initialise(game.getLevel())
+                    ui.set_level(game.getLevel(), game.get_flags())
         elif event.type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
             screen = game.setLevel(event.text)
             ui.set_level(game.getLevel(), game.get_flags())
@@ -56,11 +69,17 @@ while running:
         manager.process_events(event)
 
     ui.set_time_delta(time_delta)
-    if (game.started):
+    if (game.has_started()):
         ui.set_game_time(game.get_time())
     game.render()
     field.render()
     ui.render()
+    if (game_state == GAME_STATE_GAMEOVER or game_state == GAME_STATE_WIN):
+        if game_state == GAME_STATE_WIN:
+            # update hiscores
+            pass
+        end_screen.set_hiscores(game.get_data())
+        end_screen.render(game_state)
 
     pygame.display.flip()
 

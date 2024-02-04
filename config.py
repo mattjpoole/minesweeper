@@ -1,6 +1,6 @@
 """A list of constants for configuring the game"""
 
-#general settings
+#colours settings
 WINDOW_BG_COLOUR = [116, 207, 252, 255]
 CELL_COLOUR = [116, 207, 252, 255]
 ALT_CELL_COLOUR = [69, 186, 245, 255]
@@ -8,8 +8,9 @@ CELL_BORDER_HOVER = [12, 140, 204, 255]
 CELL_COLOUR_MINE = [250, 132, 142, 255]
 CELL_COLOUR_EMPTY = [182, 193, 250, 255]
 UI_BG_COLOUR = [12, 140, 204, 252]
-UI_HEIGHT = 60
+TRY_AGAIN_HOVER = [116, 207, 252, 255]
 
+UI_HEIGHT = 60
 CLOCK_SPEED = 60
 
 # level data
@@ -52,6 +53,18 @@ WINDOW_CAPTION = "MINESWEEPER"
 LEVEL_EASY = "Easy"
 LEVEL_MEDIUM = "Medium"
 LEVEL_HARD = "Hard"
+TITLE_GAMEOVER = "GAME OVER!"
+SUBTITLE_GAMEOVER = "Better luck next time!"
+SUBTITLE_YOUWIN = "Try to beat your best time."
+SUBTITLE_NEWHISCORE = "You set a new best time!"
+TITLE_YOUWIN = "YOU WIN!"
+TRY_AGAIN = "Try Again"
+
+# game states
+GAME_STATE_WAITING = "waiting"
+GAME_STATE_STARTED = "started"
+GAME_STATE_GAMEOVER = "gameover"
+GAME_STATE_WIN = "win"
 
 # default game data
 GAME_DATA_LOCATION = './data/bt.txt'

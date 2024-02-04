@@ -1,6 +1,7 @@
 import pygame
 import pygame_gui
 from config import *
+from utils import Utils
 
 class UIControls():
 
@@ -56,16 +57,8 @@ class UIControls():
         screen.blit(num_flags_text, (170, 20))
         
         # draw game timer
-        total_time_in_seconds = int(self.game_time / 1000)
-        seconds = int(total_time_in_seconds % 60)
-        minutes = int(total_time_in_seconds / 60)
-        display_seconds = str(seconds)
-        if (seconds<10):
-            display_seconds = "0"+display_seconds
-        display_minutes = str(minutes)
-        if (minutes<10):
-            display_minutes = "0"+display_minutes
-        display_time = display_minutes+":"+display_seconds
+        utils = Utils()
+        display_time = utils.milliseconds_to_display_text(self.game_time)
         timer_text = font.render(display_time, True, "black")
         screen.fill(CELL_COLOUR_EMPTY, self.timer_rect)
         screen.blit(
