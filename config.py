@@ -53,6 +53,10 @@ LEVEL_EASY = "Easy"
 LEVEL_MEDIUM = "Medium"
 LEVEL_HARD = "Hard"
 
+# default game data
+GAME_DATA_LOCATION = './data/bt.txt'
+GAME_DATA = {LEVEL_EASY: 0, LEVEL_MEDIUM: 0, LEVEL_HARD: 0}
+
 # debug
 DEBUG_ON = False
 DEBUG_MINE_LOCATIONS_EASY = {"12": 12, "23": 23, "25": 25, "31": 31, "34": 34, "40": 40,

@@ -9,6 +9,7 @@ from sweeper_field import SweeperField
 # game setup
 game = Game()
 screen = game.setLevel(LEVEL_EASY)
+game.load_game_data()
 manager = pygame_gui.UIManager(pygame.display.get_window_size())
 
 # main game classes
@@ -35,16 +36,14 @@ while running:
             if mouse_click[0]:
                 cell_clicked = field.click_cell_at_coords(pygame.mouse.get_pos())
                 if field.is_game_over():
-                    game.stop_game()
-                    print("LOSE!!")
+                    game.game_over()
             elif mouse_click[2]:
                 flags_left = game.get_flags()
                 ammend_flags = field.right_click_cell_at_coords(pygame.mouse.get_pos(), flags_left)
                 game.use_flag(ammend_flags)
                 ui.set_flags(game.get_flags())
                 if field.is_win_condition():
-                    game.stop_game()
-                    print("WIN!!!")
+                    game.win_game()
             if cell_clicked or ammend_flags == -1:
                 game.start_game()
         elif event.type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:

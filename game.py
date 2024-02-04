@@ -1,4 +1,5 @@
 import pygame
+import json
 from config import *
 
 class Game():
@@ -12,6 +13,7 @@ class Game():
         self.icons = {}
         self.timer = 0
         self.started = False
+        self.data = {}
         pygame.init()
         pygame.display.set_caption(WINDOW_CAPTION)
 
@@ -34,6 +36,16 @@ class Game():
         self.started = False
         return self.screen
     
+    def load_game_data(self) -> None:
+        try: 
+            # the file already exists 
+            with open(GAME_DATA_LOCATION) as load_file: 
+                self.data = json.load(load_file) 
+        except: 
+            # create the file and store initial values 
+            with open(GAME_DATA_LOCATION, 'w') as store_file: 
+                json.dump(GAME_DATA, store_file)
+    
     def getLevel(self) -> str:
         return self.level
 
@@ -42,8 +54,14 @@ class Game():
             self.timer = pygame.time.get_ticks()
             self.started = True
     
-    def stop_game(self) -> None:
+    def game_over(self) -> None:
         self.started = False
+    
+    def win_game(self) -> None:
+        self.started = False
+        self.data[self.level] = self.get_time()
+        with open(GAME_DATA_LOCATION, 'w') as store_file: 
+                json.dump(self.data, store_file)
     
     def get_time(self) -> int:
         return pygame.time.get_ticks() - self.timer
