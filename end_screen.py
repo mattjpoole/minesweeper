@@ -6,12 +6,14 @@ class EndScreen():
 
     def __init__(self) -> None:
         self.hiscores_data = {}
-        self.width = 300
-        self.section_gap = 10
+        self.is_hiscore = False
+        
         self.title_bar = None
         self.hiscores = None
         self.try_again = None
-    
+
+        self.width = 300
+        self.section_gap = 10
         self.top_pos = UI_HEIGHT + self.section_gap
         self.title_bar_height = 50
         self.hiscores_height = 200
@@ -30,6 +32,9 @@ class EndScreen():
     def set_icons(self, icons) -> None:
         self.icons = icons
 
+    def new_hiscore(self) -> None:
+        self.is_hiscore = True
+
     def render(self, game_state) -> None:
         screen = pygame.display.get_surface()
         screen_width = pygame.display.get_window_size()[0]
@@ -47,7 +52,10 @@ class EndScreen():
             title_icon = self.icons[ICON_MINE] # mine if you lose
         else:
             title_str = TITLE_YOUWIN
-            subtitle_str = SUBTITLE_YOUWIN
+            if self.is_hiscore:
+                subtitle_str = SUBTITLE_NEWHISCORE    
+            else:            
+                subtitle_str = SUBTITLE_YOUWIN
             title_icon = self.icons[ICON_FLAG] # flag if you win
 
         # title bar
@@ -117,7 +125,13 @@ class EndScreen():
             self.try_again.fill(pygame.Color(UI_BG_COLOUR))
 
     def try_again_clicked(self, coords) -> bool:
-        return self.try_again_rect.collidepoint(coords)
+        collides = False
+        if (self.try_again_rect.collidepoint(coords)):
+            collides = True
+            self.is_hiscore = False
+        return collides
+
+        
     
     def set_hiscores(self, hiscores) -> None:
         self.hiscores_data = hiscores

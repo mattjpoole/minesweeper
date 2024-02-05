@@ -31,6 +31,8 @@ clock = pygame.time.Clock()
 while running:
     time_delta = clock.tick(CLOCK_SPEED)/ 1000.0
     game_state = game.get_state()
+    if (game.has_started()):
+        ui.set_game_time(game.get_time())
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -40,6 +42,7 @@ while running:
             ammend_flags = 0
             left_click = mouse_click[0]
             right_click = mouse_click[2]
+            new_hiscore = False
             if game.has_started() or game_state == GAME_STATE_WAITING:
                 if left_click:
                     cell_clicked = field.click_cell_at_coords(pygame.mouse.get_pos())
@@ -53,7 +56,9 @@ while running:
                 if cell_clicked or ammend_flags == -1:
                    game.start_game()
                    if field.is_win_condition() and ammend_flags == -1:
-                       game.win_game()
+                      if game.win_game(): # if a new hiscore set the state on the end screen
+                         end_screen.new_hiscore()
+
             elif game_state == GAME_STATE_GAMEOVER or game_state == GAME_STATE_WIN:
                 if end_screen.try_again_clicked(pygame.mouse.get_pos()):
                     game.setLevel(game.getLevel())
@@ -69,15 +74,10 @@ while running:
         manager.process_events(event)
 
     ui.set_time_delta(time_delta)
-    if (game.has_started()):
-        ui.set_game_time(game.get_time())
     game.render()
     field.render()
     ui.render()
     if (game_state == GAME_STATE_GAMEOVER or game_state == GAME_STATE_WIN):
-        if game_state == GAME_STATE_WIN:
-            # update hiscores
-            pass
         end_screen.set_hiscores(game.get_data())
         end_screen.render(game_state)
 

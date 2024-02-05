@@ -7,7 +7,7 @@ TODO:
     ~check for all flags correctly placed~
     ~cannot place more flags than mines~
     ~win screen~
-    make win screen text sensitive to new hiscore
+    ~make win screen text sensitive to new hiscore~
     cell hover disabled while open
 2. Game over state
     ~detect when all mines are revealed~

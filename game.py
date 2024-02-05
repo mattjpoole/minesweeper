@@ -57,11 +57,16 @@ class Game():
     def game_over(self) -> None:
         self.state = GAME_STATE_GAMEOVER
     
-    def win_game(self) -> None:
+    def win_game(self) -> bool:
         self.state = GAME_STATE_WIN
-        self.data[self.level] = self.get_time()
-        with open(GAME_DATA_LOCATION, 'w') as store_file: 
-                json.dump(self.data, store_file)
+        new_hiscore = False
+        if (self.data[self.level] == 0 or self.data[self.level] > self.get_time()):
+            # new best time for this level
+            new_hiscore = True
+            self.data[self.level] = self.get_time()
+            with open(GAME_DATA_LOCATION, 'w') as store_file: 
+                    json.dump(self.data, store_file)
+        return new_hiscore
     
     def has_started(self) -> bool:
         return self.state == GAME_STATE_STARTED
