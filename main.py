@@ -34,16 +34,19 @@ while running:
     if (game.has_started()):
         ui.set_game_time(game.get_time())
     for event in pygame.event.get():
+        
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_click = pygame.mouse.get_pressed()
-            cell_clicked = False
-            ammend_flags = 0
             left_click = mouse_click[0]
             right_click = mouse_click[2]
+            cell_clicked = False
+            ammend_flags = 0
             new_hiscore = False
+            
             if game.has_started() or game_state == GAME_STATE_WAITING:
+
                 if left_click:
                     cell_clicked = field.click_cell_at_coords(pygame.mouse.get_pos())
                     if field.is_game_over():
@@ -53,6 +56,7 @@ while running:
                     ammend_flags = field.right_click_cell_at_coords(pygame.mouse.get_pos(), flags_left)
                     game.use_flag(ammend_flags)
                     ui.set_flags(game.get_flags())
+
                 if cell_clicked or ammend_flags == -1:
                    game.start_game()
                    if field.is_win_condition() and ammend_flags == -1:
@@ -64,6 +68,7 @@ while running:
                     game.setLevel(game.getLevel())
                     field.initialise(game.getLevel())
                     ui.set_level(game.getLevel(), game.get_flags())
+
         elif event.type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
             screen = game.setLevel(event.text)
             ui.set_level(game.getLevel(), game.get_flags())
