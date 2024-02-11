@@ -20,7 +20,8 @@ TODO:
    * prettify hiscore list
    * ~disable drop down when on end screen~
 4. Installers https://pyinstaller.org/en/stable/index.html
-5. Improve empty square colour, make alternating light/dark
+5. ~Improve empty square colour, make alternating light/dark~
 6. Sweeper field should not react under open drop down
 7. ~Refactor main.py~
 8. Be more juicy; audio/particle effects
+9. Theme the drop down menu

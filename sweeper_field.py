@@ -180,16 +180,21 @@ class SweeperField():
     def reveal_cells(self, cell, neighbours:list) -> None:
         if cell.is_closed():
             if cell.get_num_mines() == 0:
-                cell.set_state(ICON_STATE_EMPTY)
-                cell.set_colour(CELL_COLOUR_EMPTY)
+                cell.set_state(ICON_STATE_EMPTY) 
+                if cell.get_colour()==CELL_COLOUR:
+                    cell.set_colour(CELL_COLOUR_EMPTY)
+                else:
+                    cell.set_colour(ALT_CELL_COLOUR_EMPTY)
                 for neighbour in neighbours:
                     if neighbour.is_in_bounds():
                         self.reveal_cells(neighbour, self.get_neighbours(neighbour))
             else:
                 cell_state = ICONS[cell.get_num_mines()-1]
                 cell.set_state(cell_state, self.icons[cell_state])
-                cell.set_colour(CELL_COLOUR_EMPTY)
-
+                if cell.get_colour()==CELL_COLOUR:
+                    cell.set_colour(CELL_COLOUR_EMPTY)
+                else:
+                    cell.set_colour(ALT_CELL_COLOUR_EMPTY)
     def reveal_all_mines(self):
         for cell in self.grid_list:
             if cell.is_mine_square() and cell.is_closed():
