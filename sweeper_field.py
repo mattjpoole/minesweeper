@@ -78,13 +78,14 @@ class SweeperField():
     def set_icons(self, icons) -> None:
         self.icons = icons
 
-    def render(self) -> None:
+    def render(self, hoverEnabled) -> None:
         screen = pygame.display.get_surface()
         for cell in self.grid_list:
             cell_rect = cell.get_rect()
             screen.fill(cell.get_colour(), cell_rect)
-            if (cell_rect.collidepoint(pygame.mouse.get_pos()) and cell.is_closed() and not cell.is_empty()):
-                pygame.draw.rect(screen, CELL_BORDER_HOVER, cell_rect, 2)
+            if hoverEnabled:
+                if(cell_rect.collidepoint(pygame.mouse.get_pos()) and cell.is_closed() and not cell.is_empty()):
+                    pygame.draw.rect(screen, CELL_BORDER_HOVER, cell_rect, 2)
             cell.render()
 
     def generatate_mine_locations(self, total, num_mines) -> dict:

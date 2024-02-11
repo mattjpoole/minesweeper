@@ -43,6 +43,12 @@ class UIControls():
     def set_flags(self, flags) -> None:
         self.flags_to_place = flags
     
+    def disable(self) -> None:
+        self.level_drop_down.disable()
+
+    def enable(self) -> None:
+        self.level_drop_down.enable()
+
     def render(self) -> None:
         screen = pygame.display.get_surface()
         # draw drop down

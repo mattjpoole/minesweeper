@@ -8,7 +8,7 @@ TODO:
    * ~cannot place more flags than mines~
    * ~win screen~
    * ~make win screen text sensitive to new hiscore~
-   * cell hover disabled while open
+   * ~cell hover disabled while open~
 2. Game over state
    * ~detect when all mines are revealed~
    * ~stop timer~
@@ -18,9 +18,9 @@ TODO:
    * ~update on better times~
    * ~show high score in end screen~
    * prettify hiscore list
-   * disable drop down when on end screen
+   * ~disable drop down when on end screen~
 4. Installers https://pyinstaller.org/en/stable/index.html
 5. Improve empty square colour, make alternating light/dark
 6. Sweeper field should not react under open drop down
-7. Refactor main.py
+7. ~Refactor main.py~
 8. Be more juicy; audio/particle effects
