@@ -84,7 +84,7 @@ class EndScreen():
         easy_hiscore = utils.milliseconds_to_display_text(self.hiscores_data[LEVEL_EASY])
         medium_hiscore = utils.milliseconds_to_display_text(self.hiscores_data[LEVEL_MEDIUM])
         hard_hiscore = utils.milliseconds_to_display_text(self.hiscores_data[LEVEL_HARD])
-
+        
         easy_hiscore_text = font.render(easy_hiscore, True, "white")
         easy_text = font.render(LEVEL_EASY, True, "white")
         medium_hiscore_text = font.render(medium_hiscore, True, "white")

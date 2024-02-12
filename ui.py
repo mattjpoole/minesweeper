@@ -21,9 +21,9 @@ class UIControls():
             options_list=[LEVEL_EASY, LEVEL_MEDIUM, LEVEL_HARD],
             starting_option=starting_level, relative_rect=pygame.Rect((7, 7), (100, 40)),
             manager=self.ui_manager)
-        self.flag_rect = pygame.draw.rect(self.bg_rect, CELL_COLOUR_EMPTY,
+        self.flag_rect = pygame.draw.rect(self.bg_rect, TEXT_BG_COLOUR,
                                           [140, 10, 70, 35])
-        self.timer_rect = pygame.draw.rect(self.bg_rect, CELL_COLOUR_EMPTY,
+        self.timer_rect = pygame.draw.rect(self.bg_rect, TEXT_BG_COLOUR,
                                           [240, 10, 100, 35])
 
     def set_icons(self, icons) -> None:
@@ -43,6 +43,12 @@ class UIControls():
     def set_flags(self, flags) -> None:
         self.flags_to_place = flags
     
+    def disable(self) -> None:
+        self.level_drop_down.disable()
+
+    def enable(self) -> None:
+        self.level_drop_down.enable()
+
     def render(self) -> None:
         screen = pygame.display.get_surface()
         # draw drop down

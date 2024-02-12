@@ -78,13 +78,14 @@ class SweeperField():
     def set_icons(self, icons) -> None:
         self.icons = icons
 
-    def render(self) -> None:
+    def render(self, hoverEnabled) -> None:
         screen = pygame.display.get_surface()
         for cell in self.grid_list:
             cell_rect = cell.get_rect()
             screen.fill(cell.get_colour(), cell_rect)
-            if (cell_rect.collidepoint(pygame.mouse.get_pos()) and cell.is_closed() and not cell.is_empty()):
-                pygame.draw.rect(screen, CELL_BORDER_HOVER, cell_rect, 2)
+            if hoverEnabled:
+                if(cell_rect.collidepoint(pygame.mouse.get_pos()) and cell.is_closed() and not cell.is_empty()):
+                    pygame.draw.rect(screen, CELL_BORDER_HOVER, cell_rect, 2)
             cell.render()
 
     def generatate_mine_locations(self, total, num_mines) -> dict:
@@ -179,16 +180,21 @@ class SweeperField():
     def reveal_cells(self, cell, neighbours:list) -> None:
         if cell.is_closed():
             if cell.get_num_mines() == 0:
-                cell.set_state(ICON_STATE_EMPTY)
-                cell.set_colour(CELL_COLOUR_EMPTY)
+                cell.set_state(ICON_STATE_EMPTY) 
+                if cell.get_colour()==CELL_COLOUR:
+                    cell.set_colour(CELL_COLOUR_EMPTY)
+                else:
+                    cell.set_colour(ALT_CELL_COLOUR_EMPTY)
                 for neighbour in neighbours:
                     if neighbour.is_in_bounds():
                         self.reveal_cells(neighbour, self.get_neighbours(neighbour))
             else:
                 cell_state = ICONS[cell.get_num_mines()-1]
                 cell.set_state(cell_state, self.icons[cell_state])
-                cell.set_colour(CELL_COLOUR_EMPTY)
-
+                if cell.get_colour()==CELL_COLOUR:
+                    cell.set_colour(CELL_COLOUR_EMPTY)
+                else:
+                    cell.set_colour(ALT_CELL_COLOUR_EMPTY)
     def reveal_all_mines(self):
         for cell in self.grid_list:
             if cell.is_mine_square() and cell.is_closed():
