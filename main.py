@@ -37,21 +37,22 @@ def processEvents(event) -> None:
 
         if game.has_started() or game_state == GAME_STATE_WAITING:
 
-            if left_click:  
-                cell_clicked = field.click_cell_at_coords(pygame.mouse.get_pos())
-                if field.is_game_over():
-                    game.game_over()
-            elif right_click:
-                flags_left = game.get_flags()
-                ammend_flags = field.right_click_cell_at_coords(pygame.mouse.get_pos(), flags_left)
-                game.use_flag(ammend_flags)
-                ui.set_flags(game.get_flags())
+            if not ui.dropdown_is_expanded():
+                if left_click:  
+                    cell_clicked = field.click_cell_at_coords(pygame.mouse.get_pos())
+                    if field.is_game_over():
+                        game.game_over()
+                elif right_click:
+                    flags_left = game.get_flags()
+                    ammend_flags = field.right_click_cell_at_coords(pygame.mouse.get_pos(), flags_left)
+                    game.use_flag(ammend_flags)
+                    ui.set_flags(game.get_flags())
 
-            if cell_clicked or ammend_flags == -1:
-                game.start_game()
-                if field.is_win_condition() and ammend_flags == -1:
-                    if game.win_game(): # if a new hiscore set the state on the end screen
-                        end_screen.new_hiscore()
+                if cell_clicked or ammend_flags == -1:
+                    game.start_game()
+                    if field.is_win_condition() and ammend_flags == -1:
+                        if game.win_game(): # if a new hiscore set the state on the end screen
+                            end_screen.new_hiscore()
 
         elif game_state == GAME_STATE_GAMEOVER or game_state == GAME_STATE_WIN:
             if end_screen.try_again_clicked(pygame.mouse.get_pos()):

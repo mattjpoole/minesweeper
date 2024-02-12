@@ -14,7 +14,7 @@ class EndScreen():
 
         self.width = 300
         self.section_gap = 10
-        self.top_pos = UI_HEIGHT + self.section_gap
+        self.top_pos = UI_HEIGHT + self.section_gap + 20
         self.title_bar_height = 50
         self.hiscores_height = 200
         self.try_again_height = 50
@@ -28,6 +28,9 @@ class EndScreen():
         self.hiscores.fill(pygame.Color(UI_BG_COLOUR))
         self.try_again = pygame.Surface((self.width, self.try_again_height))
         self.try_again.fill(pygame.Color(UI_BG_COLOUR))
+
+        self.easy_hiscore_bg = pygame.Surface((150, 30))
+        self.easy_hiscore_bg.fill(pygame.Color(UI_BG_COLOUR))
 
     def set_icons(self, icons) -> None:
         self.icons = icons
@@ -71,7 +74,7 @@ class EndScreen():
         
         screen.blit(title_txt, (title_text_left_pos, title_text_top_pos))
 
-        # hiscores
+        # hiscore panel - subtitle
         hiscore_vpadding = 20
         hiscore_hpadding = 35
         subtitle_str_text = font.render(subtitle_str, True, "white")
@@ -80,17 +83,20 @@ class EndScreen():
         
         screen.blit(subtitle_str_text, (subtitle_str_text_lp, subtitle_str_text_tp))
 
+        # hiscore panel - hiscores
         utils = Utils()
         easy_hiscore = utils.milliseconds_to_display_text(self.hiscores_data[LEVEL_EASY])
         medium_hiscore = utils.milliseconds_to_display_text(self.hiscores_data[LEVEL_MEDIUM])
         hard_hiscore = utils.milliseconds_to_display_text(self.hiscores_data[LEVEL_HARD])
         
-        easy_hiscore_text = font.render(easy_hiscore, True, "white")
+        #screen.blit(self.easy_hiscore_bg,(hiscore_rect[0] + hiscore_hpadding, subtitle_str_text_tp + subtitle_str_text.get_height() + hiscore_vpadding))
+
         easy_text = font.render(LEVEL_EASY, True, "white")
-        medium_hiscore_text = font.render(medium_hiscore, True, "white")
+        easy_hiscore_text = font.render(easy_hiscore, True, "white")
         medium_text = font.render(LEVEL_MEDIUM, True, "white")
-        hard_hiscore_text = font.render(hard_hiscore, True, "white")
+        medium_hiscore_text = font.render(medium_hiscore, True, "white")
         hard_text = font.render(LEVEL_HARD, True, "white")
+        hard_hiscore_text = font.render(hard_hiscore, True, "white")  
 
         easy_text_lp = hiscore_rect[0] + hiscore_hpadding
         easy_text_tp = subtitle_str_text_tp + subtitle_str_text.get_height() + hiscore_vpadding
@@ -131,7 +137,5 @@ class EndScreen():
             self.is_hiscore = False
         return collides
 
-        
-    
     def set_hiscores(self, hiscores) -> None:
         self.hiscores_data = hiscores

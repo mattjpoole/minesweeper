@@ -49,6 +49,9 @@ class UIControls():
     def enable(self) -> None:
         self.level_drop_down.enable()
 
+    def dropdown_is_expanded(self) -> bool :
+        return type(self.level_drop_down.current_state) == pygame_gui.elements.ui_drop_down_menu.UIExpandedDropDownState
+
     def render(self) -> None:
         screen = pygame.display.get_surface()
         # draw drop down
