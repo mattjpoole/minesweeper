@@ -11,7 +11,7 @@ from end_screen import EndScreen
 game = Game()
 screen = game.setLevel(LEVEL_EASY)
 game.load_game_data()
-manager = pygame_gui.UIManager(pygame.display.get_window_size())
+manager = pygame_gui.UIManager(pygame.display.get_window_size(), UI_THEME_PATH)
 
 # main game classes
 ui = UIControls(manager, game.background)

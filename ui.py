@@ -22,7 +22,7 @@ class UIControls():
             starting_option=starting_level, relative_rect=pygame.Rect((7, 7), (100, 40)),
             manager=self.ui_manager)
         self.flag_rect = pygame.draw.rect(self.bg_rect, TEXT_BG_COLOUR,
-                                          [140, 10, 70, 35])
+                                          [136, 10, 70, 35])
         self.timer_rect = pygame.draw.rect(self.bg_rect, TEXT_BG_COLOUR,
                                           [240, 10, 100, 35])
 
