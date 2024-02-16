@@ -10,6 +10,7 @@ class SweeperField():
         self.icons = []
         self.grid_size = 0
         self.num_mines = 0
+        self.started = False
 
     def initialise(self, level) -> None:
         """Create a feild of sweeper cells ready to start the game"""
@@ -29,11 +30,11 @@ class SweeperField():
             cell_size = HARD_CELL_SIZE
             num_mines = NUM_MINES_HARD
         self.num_mines = num_mines
+        self.started = False
         total = self.grid_size * self.grid_size
         screen = pygame.display.get_surface()
         top = UI_HEIGHT
         column = left = cell_num = row = 0
-        mine_locations = self.generatate_mine_locations(total, num_mines)
         while cell_num<total:
             if cell_num % 2 == 0:
                 if row % 2 == 0:
@@ -46,11 +47,7 @@ class SweeperField():
                 else:
                     colour = CELL_COLOUR
             rect = pygame.draw.rect(screen, colour, [left, top, cell_size, cell_size])
-            has_mine = False
-            for location in mine_locations.values():
-                if cell_num == location:
-                    has_mine = True
-            cell = SweeperCell(rect, colour, has_mine)
+            cell = SweeperCell(rect, colour)
             cell.set_size((cell_size, cell_size))
             cell.set_field_coords(column, row)
             cell.set_grid_index(cell_num)
@@ -62,7 +59,6 @@ class SweeperField():
                 row += 1
             left = column * cell_size
             top = row * cell_size + UI_HEIGHT
-        self.set_number_mines()
 
     def set_number_mines(self) -> None:
         """precalculates how many neighbouring mines each cell has"""
@@ -79,16 +75,10 @@ class SweeperField():
         self.icons = icons
 
     def render(self, hoverEnabled) -> None:
-        screen = pygame.display.get_surface()
         for cell in self.grid_list:
-            cell_rect = cell.get_rect()
-            screen.fill(cell.get_colour(), cell_rect)
-            if hoverEnabled:
-                if(cell_rect.collidepoint(pygame.mouse.get_pos()) and cell.is_closed() and not cell.is_empty()):
-                    pygame.draw.rect(screen, CELL_BORDER_HOVER, cell_rect, 2)
-            cell.render()
+            cell.render(hoverEnabled)
 
-    def generatate_mine_locations(self, total, num_mines) -> dict:
+    def generatate_mine_locations(self, total, num_mines, excludes) -> dict:
         mine_locations = {}
         if DEBUG_ON :
             if self.level == LEVEL_EASY:
@@ -100,8 +90,23 @@ class SweeperField():
         else:
             while len(mine_locations) < num_mines:
                 location = random.randint(0, total-1)
-                mine_locations[str(location)] = location
+                excluded = False
+                for cell in excludes:
+                    if cell.get_grid_index() == location:
+                        excluded = True
+                        break
+                if not excluded:
+                    mine_locations[str(location)] = location
         return mine_locations
+    
+    def place_mines(self, start_cell) -> None:
+        # place the mines avoiding where the player has clicked
+        excludes = self.get_neighbours(start_cell)
+        excludes.append(start_cell)
+        total = self.grid_size * self.grid_size
+        mine_locations = self.generatate_mine_locations(total, self.num_mines, excludes)
+        for cell in self.grid_list:
+            cell.set_has_mine(cell.get_grid_index() in mine_locations.values())
     
     def click_cell_at_coords(self, coords) -> bool:
         index = 0
@@ -109,6 +114,10 @@ class SweeperField():
         for cell in self.grid_list:
             cell_rect = cell.get_rect()
             if cell_rect.collidepoint(coords):
+                if not self.started:
+                    self.started = True
+                    self.place_mines(cell)
+                    self.set_number_mines()
                 if cell.is_mine_square():
                     # end the game
                     cell.set_colour(CELL_COLOUR_MINE)
@@ -195,6 +204,7 @@ class SweeperField():
                     cell.set_colour(CELL_COLOUR_EMPTY)
                 else:
                     cell.set_colour(ALT_CELL_COLOUR_EMPTY)
+
     def reveal_all_mines(self):
         for cell in self.grid_list:
             if cell.is_mine_square() and cell.is_closed():

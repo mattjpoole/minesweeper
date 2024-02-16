@@ -25,4 +25,4 @@ TODO:
 7. ~Refactor main.py~
 8. Be more juicy; audio/particle effects
 9. ~Theme the drop down menu~
-10. Prevent first square from ever being a mine
+10. ~Prevent first square from ever being a mine~
