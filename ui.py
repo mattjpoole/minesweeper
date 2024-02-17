@@ -60,7 +60,7 @@ class UIControls():
         # draw flags used
         font = pygame.font.SysFont(None, 24)
         num_flags_text = font.render("x "+str(self.flags_to_place), True, "black")
-        screen.fill(CELL_COLOUR_EMPTY, self.flag_rect)
+        screen.fill(TEXT_BG_COLOUR, self.flag_rect)
         screen.blit(
             pygame.transform.smoothscale(self.icons[ICON_FLAG], (30,30)), (140, 12))
         screen.blit(num_flags_text, (170, 20))
@@ -69,7 +69,7 @@ class UIControls():
         utils = Utils()
         display_time = utils.milliseconds_to_display_text(self.game_time)
         timer_text = font.render(display_time, True, "black")
-        screen.fill(CELL_COLOUR_EMPTY, self.timer_rect)
+        screen.fill(TEXT_BG_COLOUR, self.timer_rect)
         screen.blit(
             pygame.transform.smoothscale(self.icons[ICON_TIMER], (30,30)), (245, 12))
         screen.blit(timer_text, (285, 20))

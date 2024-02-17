@@ -18,6 +18,9 @@ class EndScreen():
         self.title_bar_height = 50
         self.hiscores_height = 200
         self.try_again_height = 50
+        self.hiscore_textbg_height = 30
+        self.hiscore_vpadding = 16
+        self.hiscore_hpadding = 35
 
         self.try_again_rect = None
 
@@ -29,9 +32,11 @@ class EndScreen():
         self.try_again = pygame.Surface((self.width, self.try_again_height))
         self.try_again.fill(pygame.Color(UI_BG_COLOUR))
 
-        self.easy_hiscore_bg = pygame.Surface((150, 30))
-        self.easy_hiscore_bg.fill(pygame.Color(UI_BG_COLOUR))
-
+        hiscoretext_bg_w = self.width - (self.hiscore_hpadding*2)
+        hiscoretext_bg_h = self.hiscore_textbg_height
+        self.hiscore_text_bg = pygame.Surface((hiscoretext_bg_w, hiscoretext_bg_h))
+        self.hiscore_text_bg.fill(pygame.Color(TEXT_BG_COLOUR))
+        
     def set_icons(self, icons) -> None:
         self.icons = icons
 
@@ -75,11 +80,9 @@ class EndScreen():
         screen.blit(title_txt, (title_text_left_pos, title_text_top_pos))
 
         # hiscore panel - subtitle
-        hiscore_vpadding = 20
-        hiscore_hpadding = 35
         subtitle_str_text = font.render(subtitle_str, True, "white")
-        subtitle_str_text_lp = hiscore_rect[0] + hiscore_hpadding
-        subtitle_str_text_tp = hiscore_rect[1] + hiscore_vpadding
+        subtitle_str_text_lp = hiscore_rect[0] + self.hiscore_hpadding
+        subtitle_str_text_tp = hiscore_rect[1] + self.hiscore_vpadding
         
         screen.blit(subtitle_str_text, (subtitle_str_text_lp, subtitle_str_text_tp))
 
@@ -89,26 +92,36 @@ class EndScreen():
         medium_hiscore = utils.milliseconds_to_display_text(self.hiscores_data[LEVEL_MEDIUM])
         hard_hiscore = utils.milliseconds_to_display_text(self.hiscores_data[LEVEL_HARD])
         
-        #screen.blit(self.easy_hiscore_bg,(hiscore_rect[0] + hiscore_hpadding, subtitle_str_text_tp + subtitle_str_text.get_height() + hiscore_vpadding))
-
-        easy_text = font.render(LEVEL_EASY, True, "white")
-        easy_hiscore_text = font.render(easy_hiscore, True, "white")
-        medium_text = font.render(LEVEL_MEDIUM, True, "white")
-        medium_hiscore_text = font.render(medium_hiscore, True, "white")
-        hard_text = font.render(LEVEL_HARD, True, "white")
-        hard_hiscore_text = font.render(hard_hiscore, True, "white")  
-
-        easy_text_lp = hiscore_rect[0] + hiscore_hpadding
-        easy_text_tp = subtitle_str_text_tp + subtitle_str_text.get_height() + hiscore_vpadding
-        easy_hiscore_text_lp = easy_text_lp + easy_text.get_width() + hiscore_hpadding
-       
-        medium_text_lp = hiscore_rect[0] + hiscore_hpadding
-        medium_text_tp = easy_text_tp + easy_text.get_height() + hiscore_vpadding
-        medium_hiscore_text_lp = easy_text_lp + easy_text.get_width() + hiscore_hpadding
+        text_bg_padding = 10
+        easy_txt_rect = screen.blit(self.hiscore_text_bg, (hiscore_rect[0] + self.hiscore_hpadding, subtitle_str_text_tp + subtitle_str_text.get_height() + self.hiscore_vpadding))
+        medium_txt_rect = screen.blit(self.hiscore_text_bg, (hiscore_rect[0] + self.hiscore_hpadding, easy_txt_rect.bottom + self.hiscore_vpadding))
+        hard_txt_rect = screen.blit(self.hiscore_text_bg, (hiscore_rect[0] + self.hiscore_hpadding, medium_txt_rect.bottom + self.hiscore_vpadding))
         
-        hard_text_lp = hiscore_rect[0] + hiscore_hpadding
-        hard_text_tp = medium_text_tp + medium_text.get_height() + hiscore_vpadding
-        hard_hiscore_text_lp = hard_text_lp + hard_text.get_width() + hiscore_hpadding
+        screen.blit(
+            pygame.transform.smoothscale(self.icons[ICON_TIMER], (28,28)), (easy_txt_rect.centerx, easy_txt_rect.top))
+        screen.blit(
+            pygame.transform.smoothscale(self.icons[ICON_TIMER], (28,28)), (medium_txt_rect.centerx, medium_txt_rect.top))
+        screen.blit(
+            pygame.transform.smoothscale(self.icons[ICON_TIMER], (28,28)), (hard_txt_rect.centerx, hard_txt_rect.top))
+
+        easy_text = font.render(LEVEL_EASY, True, "black")
+        easy_hiscore_text = font.render(easy_hiscore, True, "black")
+        medium_text = font.render(LEVEL_MEDIUM, True, "black")
+        medium_hiscore_text = font.render(medium_hiscore, True, "black")
+        hard_text = font.render(LEVEL_HARD, True, "black")
+        hard_hiscore_text = font.render(hard_hiscore, True, "black")  
+
+        easy_text_lp = easy_txt_rect.left + text_bg_padding
+        easy_text_tp = easy_txt_rect.top + easy_text.get_height()/2
+        easy_hiscore_text_lp = easy_txt_rect.right - easy_hiscore_text.get_width() - text_bg_padding
+       
+        medium_text_lp = medium_txt_rect.left + text_bg_padding
+        medium_text_tp = medium_txt_rect.top + medium_text.get_height()/2
+        medium_hiscore_text_lp = medium_txt_rect.right - medium_hiscore_text.get_width() - text_bg_padding
+        
+        hard_text_lp = hard_txt_rect.left + text_bg_padding
+        hard_text_tp = hard_txt_rect.top + hard_text.get_height()/2
+        hard_hiscore_text_lp = hard_txt_rect.right - hard_hiscore_text.get_width() - text_bg_padding
         
         screen.blit(easy_text, (easy_text_lp, easy_text_tp))
         screen.blit(easy_hiscore_text, (easy_hiscore_text_lp, easy_text_tp))

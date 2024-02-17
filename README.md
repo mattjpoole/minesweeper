@@ -17,9 +17,12 @@ TODO:
    * ~create and save data structure~
    * ~update on better times~
    * ~show high score in end screen~
-   * prettify hiscore list
+   * ~prettify hiscore list~
+   * highlight hiscore box on new hiscore
    * ~disable drop down when on end screen~
-4. Installers https://pyinstaller.org/en/stable/index.html
+4. Executables https://pyinstaller.org/en/stable/index.html
+   * ~Windows~
+   * Mac
 5. ~Improve empty square colour, make alternating light/dark~
 6. ~Sweeper field should not react under open drop down~
 7. ~Refactor main.py~

@@ -61,7 +61,7 @@ def processEvents(event) -> None:
                 ui.enable()
                 ui.set_level(game.getLevel(), game.get_flags())
 
-    elif event.type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
+    elif event.type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED: 
         game.setLevel(event.text)
         ui.set_level(game.getLevel(), game.get_flags())
         manager.set_window_resolution(pygame.display.get_window_size())
