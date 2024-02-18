@@ -6,6 +6,7 @@ from game import Game
 from ui import UIControls
 from sweeper_field import SweeperField
 from end_screen import EndScreen
+from animation_manager import AnimationManager
 
 # game setup
 game = Game()
@@ -23,6 +24,7 @@ field.set_icons(game.get_icons())
 end_screen = EndScreen()
 end_screen.initialise()
 end_screen.set_icons(game.get_icons())
+animation_manager = AnimationManager()
 if DEBUG_ON:
     field.reveal_all_mines()
 
@@ -54,7 +56,7 @@ def processEvents(event) -> None:
                         if game.win_game(): # if a new hiscore set the state on the end screen
                             end_screen.new_hiscore()
 
-        elif game_state == GAME_STATE_GAMEOVER or game_state == GAME_STATE_WIN:
+        elif game_state == GAME_STATE_ENDSCREEN:
             if end_screen.try_again_clicked(pygame.mouse.get_pos()):
                 game.setLevel(game.getLevel())
                 field.initialise(game.getLevel())
@@ -75,10 +77,20 @@ def renderAll() -> None:
     game.render()
     field.render(game_state != GAME_STATE_GAMEOVER and game_state != GAME_STATE_WIN)
     ui.render()
-    if game_state == GAME_STATE_GAMEOVER or game_state == GAME_STATE_WIN:
-        end_screen.set_hiscores(game.get_data())
-        end_screen.render(game_state)
+    if game_state == GAME_STATE_ENDSCREEN:
+        end_screen.render()
         ui.disable()
+    if game_state == GAME_STATE_GAMEOVER or game_state == GAME_STATE_WIN:
+        if animation_manager.started and animation_manager.animation_has_ended():
+            animation_manager.stop()
+            end_screen.set_hiscores(game.get_data())
+            end_screen.set_game_state(game_state)
+            game.end_screen()
+        else:
+            if not animation_manager.started: 
+                animation_manager.set_cell_locations(field.get_mine_cells())
+                animation_manager.start()
+            animation_manager.render()
 
 clock = pygame.time.Clock()
 running = True

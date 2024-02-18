@@ -27,5 +27,13 @@ TODO:
 6. ~Sweeper field should not react under open drop down~
 7. ~Refactor main.py~
 8. Be more juicy; audio/particle effects
+   * Particles on mine on game over
+   * ~Particles on flag on game win~
+   * sfx on click cell
+   * sfx on reveal
+   * sfx on place flag
+   * sfx on click on mine
+   * sfx with mine particles
+   * sfx with flag particles
 9. ~Theme the drop down menu~
 10. ~Prevent first square from ever being a mine~

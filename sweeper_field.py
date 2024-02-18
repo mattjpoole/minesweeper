@@ -186,6 +186,13 @@ class SweeperField():
         neighbours = [top_left, top_middle, top_right, middle_left, middle_right, bottom_left, bottom_middle, bottom_right]
         return neighbours
     
+    def get_mine_cells(self) -> list:
+        mine_cells = []
+        for cell in self.grid_list:
+            if cell.is_mine_square():
+                mine_cells.append(cell)
+        return mine_cells
+    
     def reveal_cells(self, cell, neighbours:list) -> None:
         if cell.is_closed():
             if cell.get_num_mines() == 0:

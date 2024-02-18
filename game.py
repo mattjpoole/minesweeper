@@ -68,6 +68,9 @@ class Game():
                     json.dump(self.data, store_file)
         return new_hiscore
     
+    def end_screen(self) -> None:
+        self.state = GAME_STATE_ENDSCREEN
+    
     def has_started(self) -> bool:
         return self.state == GAME_STATE_STARTED
     

@@ -7,6 +7,7 @@ class EndScreen():
     def __init__(self) -> None:
         self.hiscores_data = {}
         self.is_hiscore = False
+        self.game_state = ""
         
         self.title_bar = None
         self.hiscores = None
@@ -40,10 +41,13 @@ class EndScreen():
     def set_icons(self, icons) -> None:
         self.icons = icons
 
+    def set_game_state(self, game_state) -> None:
+        self.game_state = game_state
+
     def new_hiscore(self) -> None:
         self.is_hiscore = True
 
-    def render(self, game_state) -> None:
+    def render(self) -> None:
         screen = pygame.display.get_surface()
         screen_width = pygame.display.get_window_size()[0]
         left_pos = screen_width / 2 - self.width / 2
@@ -54,7 +58,7 @@ class EndScreen():
 
         # text and icons
         font = pygame.font.SysFont(None, 24)
-        if (game_state == GAME_STATE_GAMEOVER):
+        if (self.game_state == GAME_STATE_GAMEOVER):
             title_str = TITLE_GAMEOVER
             subtitle_str = SUBTITLE_GAMEOVER
             title_icon = self.icons[ICON_MINE] # mine if you lose

@@ -69,6 +69,7 @@ GAME_STATE_WAITING = "waiting"
 GAME_STATE_STARTED = "started"
 GAME_STATE_GAMEOVER = "gameover"
 GAME_STATE_WIN = "win"
+GAME_STATE_ENDSCREEN = "endscreen"
 
 # default game data
 GAME_DATA_LOCATION = './data/bt.txt'
