@@ -1,1 +1,1 @@
-{"Easy": 20682, "Medium": 217735, "Hard": 0}
+{"Easy": 15451, "Medium": 217735, "Hard": 0}

@@ -1,5 +1,7 @@
+import random
 import pygame
-from particle import ParticleSystem
+from particle import ParticleSystem, ConfettiParticle, SmokeParticle
+from config import GAME_STATE_GAMEOVER, GAME_STATE_WIN
 
 class AnimationManager:
 
@@ -8,7 +10,8 @@ class AnimationManager:
         self.cell_locations = []
         self.animation_ended = False
         self.started = False
-        self.particle_delay = 100
+        self.confetti_delay = 100
+        self.smoke_duration = 3000
         self.current_cell = 0
         self.timer = None
 
@@ -27,23 +30,42 @@ class AnimationManager:
         self.animation_ended = False
         self.started = False
 
-    def render(self) -> None:
-        if self.current_cell < len(self.cell_locations):
-            ticks = pygame.time.get_ticks()
-            if ticks - self.timer > self.particle_delay:
-                self.timer = ticks
-                rect = self.cell_locations[self.current_cell].get_rect()
-                px = rect.centerx
-                py = rect.centery
-                i = 0
-                mparts = 30
-                while i < mparts:
-                    self.ps.add_particle(px, py)
-                    i += 1 
-                self.current_cell += 1
-        elif len(self.ps.particles) == 0:
-                self.animation_ended = True
-                self.current_cell = 0
+    def render(self, game_state) -> None:    
+        if game_state == GAME_STATE_WIN:
+            self.render_confetti()
+        elif game_state == GAME_STATE_GAMEOVER:
+            self.render_smoke()
         self.ps.update()
         self.ps.draw(pygame.display.get_surface())
 
+    def render_confetti(self) -> None:
+        ticks = pygame.time.get_ticks()
+        if self.current_cell < len(self.cell_locations):
+            if ticks - self.timer > self.confetti_delay:
+                self.timer = ticks
+                rect = self.cell_locations[self.current_cell].get_rect()
+                px = rect.centerx
+                py = rect.centery   
+                i = 0
+                mparts = 30
+                while i < mparts:
+                    self.ps.add_particle(ConfettiParticle(px, py, random.randrange(1, 4)))
+                    i += 1   
+                self.current_cell += 1
+        elif len(self.ps.particles) == 0:
+            self.animation_ended = True
+            self.current_cell = 0
+    
+    def render_smoke(self) -> None:
+        ticks = pygame.time.get_ticks()
+        if ticks - self.timer < self.smoke_duration:
+            for cell in self.cell_locations:
+                if cell.exploded:
+                    rect = cell.get_rect()
+                    px = rect.centerx
+                    py = rect.centery
+                    self.ps.add_particle(SmokeParticle(px, py))
+                    break
+        else:
+            self.ps.particles.clear()
+            self.animation_ended = True

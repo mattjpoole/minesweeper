@@ -90,7 +90,7 @@ def renderAll() -> None:
             if not animation_manager.started: 
                 animation_manager.set_cell_locations(field.get_mine_cells())
                 animation_manager.start()
-            animation_manager.render()
+            animation_manager.render(game_state)
 
 clock = pygame.time.Clock()
 running = True

@@ -14,6 +14,7 @@ class SweeperCell():
         self.row = 0
         self.index = None
         self.num_mines = 0
+        self.exploded = False
 
     def get_rect(self) -> pygame.Rect:
         return self.rect

@@ -122,6 +122,7 @@ class SweeperField():
                     # end the game
                     cell.set_colour(CELL_COLOUR_MINE)
                     cell.set_state(ICON_MINE, self.icons[ICON_MINE])
+                    cell.exploded = True
                     self.reveal_all_mines()
                     self.game_over = True
                 else:
